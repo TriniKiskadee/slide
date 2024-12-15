@@ -9,8 +9,6 @@ import {v4} from "uuid";
 
 const CreateAutomation = () => {
     const mutationId = useMemo(() => v4(), [])
-
-    console.log(`Mutation ID: ${mutationId}`)
     const {mutate, isPending} = useCreateAutomation(mutationId)
 
     return (

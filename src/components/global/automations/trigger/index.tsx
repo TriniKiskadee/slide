@@ -10,6 +10,8 @@ import {AUTOMATION_TRIGGERS} from "@/constants/automation";
 import {useTriggers} from "@/hooks/use-automation";
 import {cn} from "@/lib/utils";
 import Keywords from "@/components/global/automations/trigger/keywords";
+import {Button} from "@/components/ui/button";
+import Loader from "@/components/global/loader";
 
 type TriggerProps = {
     id: string
@@ -82,11 +84,18 @@ const Trigger = ({id}: TriggerProps) => {
                         </p>
                     </div>
                 ))}
-                <Keywords id={id /}
+                <Keywords id={id} />
+                <Button
+                    onClick={onSaveTrigger}
+                    disabled={types?.length === 0}
+                    className={'bg-gradient-to-br from-[#3352CC] to-[#1C2D70] font-medium text-white'}
+                >
+                    <Loader state={isPending}>
+                        Create Trigger
+                    </Loader>
+                </Button>
             </div>
         </TriggerButton>
     )
 }
 export default Trigger
-
-/* TODO: 5:48:00 */

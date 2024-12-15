@@ -72,7 +72,7 @@ model Dms {
 
 model Post {
   id           String      @id @default(dbgenerated("gen_random_uuid()")) @db.Uuid
-  postid       String
+  postId       String
   caption      String?
   media        String
   mediaType    MEDIATYPE   @default(IMAGE)

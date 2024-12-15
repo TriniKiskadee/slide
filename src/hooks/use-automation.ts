@@ -1,13 +1,27 @@
 'use client'
 
 import {useMutationData} from "@/hooks/use-mutation-data";
-import {createAutomations, saveListener, saveTrigger, updateAutomationName} from "@/actions/automations";
+import {
+    createAutomations,
+    deleteKeyword,
+    saveKeyword,
+    saveListener, savePosts,
+    saveTrigger,
+    updateAutomationName
+} from "@/actions/automations";
 import {useEffect, useRef, useState} from "react";
 import {z} from "zod";
 import useZodForm from "@/hooks/use-zod-form";
 import {AppDispatch, useAppSelector} from "@/redux/store";
 import {useDispatch} from "react-redux";
 import {TRIGGER} from "@/redux/slices/automation";
+
+export type INSTAGRAM_POST = {
+    postId: string,
+    caption?: string,
+    media: string,
+    mediaType: 'IMAGE' | 'VIDEO' | 'CAROSEL_ALBUM'
+}
 
 export const useCreateAutomation = (id?: string) => {
     const {mutate, isPending} = useMutationData(
@@ -108,6 +122,67 @@ export const useTriggers = (id: string)=> {
         types,
         onSetTrigger,
         onSaveTrigger,
+        isPending
+    }
+}
+
+export const useKeyword = (id: string) => {
+    const [keyword, setKeyword] = useState('')
+
+    const onValueChange = (e: React.ChangeEvent<HTMLInputElement>) => setKeyword(e.target.value)
+
+    const {mutate} = useMutationData(
+        ['add-keyword'],
+        (data: {keyword: string})=> saveKeyword(id, data.keyword),
+        'automation-info',
+        () => setKeyword('')
+    )
+
+    const onKeyPress = (e: React.KeyboardEvent<HTMLInputElement>) => {
+        if (e.key === 'Enter') {
+            mutate({keyword})
+            setKeyword('')
+        }
+    }
+
+    const {mutate: deleteMutation} = useMutationData(
+        ['delete-keyword'],
+        (data: {id: string})=> deleteKeyword(data.id),
+        'automation-info'
+    )
+
+    return {
+        keyword,
+        onValueChange,
+        onKeyPress,
+        deleteMutation,
+    }
+}
+
+export const useAutomationPosts = (id: string) => {
+    const [posts, setPosts] = useState<INSTAGRAM_POST[]>([])
+
+    const onSelectPost = (post: INSTAGRAM_POST) => {
+        setPosts((prevItems) => {
+            if (prevItems.find((p) => p.postId === post.postId)) {
+                return prevItems.filter(item => item.postId !== post.postId)
+            } else {
+                return [...prevItems, post]
+            }
+        })
+    }
+
+    const {mutate, isPending} = useMutationData(
+        ['attach-posts'],
+        () => savePosts(id, posts),
+        'automation-info',
+        () => setPosts([])
+    )
+
+    return {
+        posts,
+        onSelectPost,
+        mutate,
         isPending
     }
 }

@@ -1,6 +1,7 @@
 'use server'
 
 import {client} from "@/lib/prisma";
+import {INSTAGRAM_POST} from "@/hooks/use-automation";
 
 export const createAutomation = async (clerkId: string, id?: string) => {
     return await client.user.update({
@@ -116,6 +117,44 @@ export const addTrigger = async (automationId: string, trigger: string[]) => {
             trigger: {
                 create: {
                     type: trigger[0]
+                }
+            }
+        }
+    })
+}
+
+export const addKeyword = async (automationId: string, keyword: string) => {
+    return client.automation.update({
+        where: {
+            id: automationId,
+        },
+        data: {
+            keywords: {
+                create: {
+                    word: keyword,
+                },
+            },
+        },
+    })
+}
+
+export const deleteKeywordQuery = async (id: string) => {
+    return await client.keyword.delete({
+        where: {
+            id: id,
+        }
+    })
+}
+
+export const addPost = async (automationId: string, posts: INSTAGRAM_POST[]) => {
+    return await client.automation.update({
+        where: {
+            id: automationId,
+        },
+        data: {
+            posts: {
+                createMany: {
+                    data: posts
                 }
             }
         }

@@ -70,7 +70,7 @@ const AutomationBreadCrumb = ({id}: AutomationBreadCrumbProps) => {
                     </p>
                 </div>
             </div>
-            <ActivateAutomationButton />
+            <ActivateAutomationButton id={id}/>
         </div>
     )
 }

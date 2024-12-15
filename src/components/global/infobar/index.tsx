@@ -30,7 +30,7 @@ const Infobar = ({slug}: InfobarProps) => {
                 <div className={'flex gap-x-3 lg:gap-x-5 justify-end'}>
                     <span className={'lg:hidden flex items-center flex-1 gap-x-2'}>
                         <Sheet
-                            trigger={<Menu/>}
+                            trigger={<Menu />}
                             className={'lg:hidden'}
                             side={'left'}
                         >

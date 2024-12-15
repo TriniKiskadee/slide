@@ -9,25 +9,28 @@ export const useMutationData = (
     queryKey?: string,
     onSuccess?: () => void,
 ) => {
-    const client = useQueryClient();
-    const {mutate, isPending} = useMutation({
+    const client = useQueryClient()
+    const { mutate, isPending } = useMutation({
         mutationKey,
         mutationFn,
         onSuccess: (data) => {
-            if (onSuccess) onSuccess();
-            return toast(data?.status === 200 ? 'Success' : 'Error', {
-                description: data.data
-            });
+            if (onSuccess) onSuccess()
+            {data?.status === 200 ? (
+                toast.success('Success', {
+                    description: data.data
+                })
+            ) : (
+                toast.error('Error', {
+                    description: data.data
+                })
+            )}
         },
         onSettled: async () => {
-            return await client.invalidateQueries({queryKey: [queryKey]});
-        }
-    });
+            await client.invalidateQueries({ queryKey: [queryKey] })
+        },
+    })
 
-    return {
-        mutate,
-        isPending,
-    }
+    return { mutate, isPending }
 }
 
 export const useMutationDataState = (mutationKey: MutationKey) => {
@@ -38,7 +41,7 @@ export const useMutationDataState = (mutationKey: MutationKey) => {
                 variables: mutation.state.variables as any,
                 status: mutation.state.status,
             }
-        }
+        },
     })
 
     const latestVariable = data[data.length - 1]

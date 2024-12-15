@@ -37,7 +37,10 @@ export default function RootLayout({children,}: Readonly<{ children: React.React
                                 {children}
                             </ReactQueryProvider>
                         </ReduxProvider>
-                        <Toaster />
+                        <Toaster
+                            richColors
+                            theme={'dark'}
+                        />
                     </ThemeProvider>
                 </body>
             </html>

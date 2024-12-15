@@ -54,6 +54,7 @@ const PaymentCard = ({label, current, landing}: PaymentCardProps) => {
                         <b className={'text-xl'}>
                             $99
                         </b>
+                        /month
                     </p>
                 ) : (
                     <p className={'text-xl mb-2'}>

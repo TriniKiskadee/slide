@@ -1,5 +1,10 @@
+'use client'
+
 import React from 'react'
 import {Button} from "@/components/ui/button";
+import {onOauthInstagram} from "@/actions/integrations";
+import {useQuery} from "@tanstack/react-query";
+import {onUserInfo} from "@/actions/user";
 
 type IntegrationCardProps = {
     title: string
@@ -9,7 +14,17 @@ type IntegrationCardProps = {
 }
 
 const IntegrationCard = ({title, description, icon, strategy}: IntegrationCardProps) => {
-    // WIP: fetch integrations from db
+    const onInstaOAuth = () => onOauthInstagram(strategy)
+
+    const {data} = useQuery({
+        queryKey: ['user-profile'],
+        queryFn: onUserInfo,
+    })
+
+    const integrated = data?.data?.integrations.find(
+        (integration) => integration.name === strategy
+    )
+
     return (
         <div className={'border-2 border-[#3352CC] rounded-2xl gap-x-5 p-5 flex items-center'}>
             {icon}
@@ -22,8 +37,8 @@ const IntegrationCard = ({title, description, icon, strategy}: IntegrationCardPr
                 </p>
             </div>
             <Button
-                //onClick={onInstaOAuth}
-                //disabled={integraged?.name === strategy}
+                onClick={onInstaOAuth}
+                disabled={integrated?.name === strategy}
                 className={'bg-gradient-to-br text-white rounded-full text-lg from-[#3352CC] font-medium to-[#1C2D70] hover:opacity-70 transition duration-100'}
             >
                 {/*{integrated ? 'Connected' : 'Connect'}*/}
